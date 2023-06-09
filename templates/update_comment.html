@@ -1,0 +1,9 @@
+{%extends "base.html"%}
+{%block title%}update comments{%endblock%}
+{%block content%}
+<h3 align="center">Update Commment</h3>
+<form class="input-group mb-3" method="POST">
+     {{ form.text(cols=30, rows=10, class="form-control" )}} 
+    {{ form.submit (class="btn btn-primary btn-lg")  }}
+</form>
+{%endblock%}

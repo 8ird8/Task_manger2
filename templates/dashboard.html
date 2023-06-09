@@ -1,0 +1,139 @@
+{% extends "base.html" %} 
+{%block title%}Dashboard{%endblock%}
+{%block content%}
+<h1 align="center">{%block header%}Tasks{%endblock%}</h1>
+<div id="posts">
+  {%for post in posts%}
+  <div class="card border-dark">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <a href="/posts/{{post.user.username}}" style="text-decoration: none; color:black; font-size: 18px; font-weight: bold;">{{post.user.username}}</a>
+      {%if user.id==post.author%}
+      <div class="btn-group">
+        <button class="btn btn-sm btn-danger">
+          <a
+            style="color: white; text-decoration: none"
+            href="/update/post/{{post.id}}"
+            >update</a
+          >
+        </button>
+        <button class="btn btn-sm btn-danger">
+          <a
+            style="text-decoration: none; color: white"
+            href="/delete-post/{{post.id}}"
+          >
+            Delete
+          </a>
+        </button>
+      </div>
+      {%endif%}
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">{{post.title}} </h4>
+      <div class="card-text">
+        {{post.text}}
+        
+      </div>
+
+      <br>
+      <div class="collapse" id="comments-{{post.id}}">
+        <div class="card">
+          <div class="card-body" id="comments-expanded{{post.id}}">
+            {%for comment in post.comments%}
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <a href="/posts/{{comment.user.username}}"
+                  >{{comment.user.username}}</a
+                >: <br> {{comment.text}}
+              </div>
+
+              <div>
+                <small class="text-muted">{{comment.date_created}}</small>
+                {%if user.id==comment.author or user.id==post.author%}
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-danger">
+                    <a
+                      style="text-decoration: none; color: white"
+                      href="/delete-comment/{{comment.id}}"
+                    >
+                      Delete
+                    </a>
+                  </button>
+                  <button class="btn btn-sm btn-secondary">
+                    <a
+                      style="text-decoration: none; color: white"
+                      href="/update-comment/{{comment.id}}"
+                    >
+                      Modify
+                    </a>
+                  </button>
+                </div>
+                {%endif%}
+              </div>
+            </div>
+            {%endfor%}
+          </div>
+        </div>
+      </div>
+      <p class="card-text">
+        {%if post.comments|length > 0 %}
+        <a href="#comments-{{post.id}}" role="button" data-bs-toggle="collapse">
+          <small>View {{post.comments|length}} Comments</small></a
+        >
+
+        {%else%}
+        <small class="text-muted">No Comments</small>
+        {%endif%}
+      </p>
+
+      <form
+        method="POST"
+        action="/create-comment/{{post.id}}"
+        class="input-group mb-3"
+        method="POST"
+      >
+        {{ form.hidden_tag() }} {{ form.text (class="form-control")}} {{
+        form.submit (class="btn btn-primary")}}
+      </form>
+    </div>
+    <div class="card-footer text-muted">{{post.date_created}}</div>
+  </div>
+  <br />
+  {%endfor%}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    $(document).ready(function () {
+      $('a[data-bs-toggle="collapse"]').on("click", function () {
+        var targetId = $(this).attr("href");
+        var targetLink = $(this);
+        var commentCount = $(targetId).find(".card-body .d-flex").length;
+
+        $(targetId).on("show.bs.collapse", function () {
+          targetLink.text("Hide Comments");
+        });
+
+        $(targetId).on("hide.bs.collapse", function () {
+          targetLink.text("View " +commentCount + " Comments");
+        });
+      });
+    });
+  });
+  function displayImage(event) {
+    var input = event.target;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var image = document.createElement('img');
+        image.src = e.target.result;
+        image.classList.add('img-fluid');
+        document.getElementById('image-container').innerHTML = '';
+        document.getElementById('image-container').appendChild(image);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+{%endblock%}

@@ -1,0 +1,24 @@
+{% extends "base.html" %} 
+{%block title%}Create post{%endblock%} 
+{%block content%}
+    <div class="pip">
+      <h1 align="center">Make a Post</h1>
+      <div align="center">
+        <form method="POST" action="/create-post">
+          {{ form.hidden_tag() }} {{ form.title( class="form-control" )}} <br>
+          {{ form.text( class="form-control" )}} 
+          {{ form.submit (class="btn btn-primary btn-lg")  }}
+        </form>
+      </div>
+      
+      <br />
+      <div align="center">
+        <a href="{{url_for('dashboard')}}">
+          <button type="button" class="btn btn-lg btn-secondary">
+            Back
+          </button></a
+        >
+      </div>
+    </div>
+    {%endblock%}
+  

@@ -1,0 +1,8 @@
+{% extends "dashboard.html " %}
+{%block title%}{{username}}'s Posts{%endblock%}
+{%block header %}
+<h1 align="center">{{username}}'s Posts</h1>
+<div align="center">
+    <a href="{{ url_for('dashboard') }}"> <button type="button" class="btn btn-primary btn-lg">Back</button></a>
+</div>
+{%endblock%}
